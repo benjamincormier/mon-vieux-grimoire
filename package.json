@@ -1,0 +1,11 @@
+{
+  "name": "mon-vieux-grimoire",
+  "version": "1.0.0",
+  "description": "Node.js backend for mon-vieux-grimoire",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Benjamin Cormier",
+  "license": "ISC"
+}
