@@ -1,16 +1,14 @@
 const http = require('http');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const app = require('./app');
-const { error } = require('console');
-
 dotenv.config({ path: './config.env' });
+const app = require('./app');
 
 // MONGO DB
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.MONGODB_PASSWORD
-);
+).replace('<USERNAME>', process.env.MONGODB_USERNAME);
 
 mongoose
   .connect(DB, {
@@ -20,7 +18,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log('DB connection successful!'))
-  .catch((error) => console.error('DB connection failed' + error));
+  .catch((error) => console.log('DB connection failed' + error));
 
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
