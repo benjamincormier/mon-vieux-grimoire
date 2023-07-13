@@ -1,6 +1,9 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const userRouter = require('./routes/userRoutes');
 const app = express();
+
+// mongodb+srv://benjamincormier:sGmNbYG4FMbNJ8f2@cluster0.8rceppu.mongodb.net/
 
 // MIDDLEWARE
 
@@ -26,7 +29,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// TEMP middleware to end req/res cycle
+// TEMP MIDDLEWARE
 app.use((req, res, next) => {
   console.log(`This is a request on ${req.path}`);
   console.log(`req.body = ${req.body}`);
