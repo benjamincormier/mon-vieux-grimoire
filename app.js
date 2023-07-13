@@ -29,16 +29,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// TEMP MIDDLEWARE
-app.use((req, res, next) => {
-  console.log(`This is a request on ${req.path}`);
-  console.log(`req.body = ${req.body}`);
-  console.log('Réponse envoyée avec succès !');
-  // res.status(201);
-  // res.json({ message: "Votre requête a bien été reçue !" });
-  next();
-});
-
 // ROUTES
 app.use('/api/auth', userRouter);
 
