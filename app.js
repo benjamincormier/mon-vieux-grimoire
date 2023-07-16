@@ -1,9 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const userRouter = require('./routes/userRoutes');
+const booksRouter = require('./routes/booksRoutes');
 const app = express();
-
-// mongodb+srv://benjamincormier:sGmNbYG4FMbNJ8f2@cluster0.8rceppu.mongodb.net/
 
 // MIDDLEWARE
 
@@ -24,12 +23,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Test middleware
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
+  console.log(req.url);
+  console.log(req.headers);
   next();
 });
 
 // ROUTES
 app.use('/api/auth', userRouter);
+app.use('/api/books', booksRouter);
 
 module.exports = app;
