@@ -1,3 +1,5 @@
+const Book = require('../models/bookModel');
+
 exports.getAllBooks = (req, res) => {
   console.log('get All Books !');
   res.status(500).json({
