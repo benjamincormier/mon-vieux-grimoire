@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
 const userRouter = require('./routes/userRoutes');
 const booksRouter = require('./routes/booksRoutes');
 const app = express();
@@ -26,14 +25,11 @@ app.use((req, res, next) => {
 
 // Test middleware
 app.use((req, res, next) => {
-  /* console.log('Hello from the middleware 👋');
+  console.log('Hello from the middleware 👋');
   console.log(req.url);
-  console.log(req.headers); */
+  console.log(req.headers);
   next();
 });
-
-// STATIC FILES (IMAGES)
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // ROUTES
 app.use('/api/auth', userRouter);
