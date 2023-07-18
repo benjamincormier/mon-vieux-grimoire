@@ -1,6 +1,9 @@
 # config files
 config.env
 
+# images uploaded by users
+/images
+
 # dependencies
 /node_modules
 
