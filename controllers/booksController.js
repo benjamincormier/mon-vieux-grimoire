@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const Book = require('../models/bookModel');
 
 exports.getAllBooks = (req, res) => {
@@ -61,10 +63,31 @@ exports.updateBook = (req, res) => {
 };
 
 exports.deleteBook = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+  const id = req.params.id;
+  console.log('id of the book to delete :', id);
+  Book.findOne({ _id: id })
+    .then((book) => {
+      console.log('book ', book);
+      if (book.userId != req.auth.userId) {
+        // Checking if user requesting delete book is the user who created resource. If not return 401 "Unauthorized"
+        res.status(401).json({ message: 'Not authorized' });
+      } else {
+        // Deleting image from file system
+        const filename = book.imageUrl.split('/images/')[1];
+        console.log('filename :' + filename);
+        fs.unlink(`images/${filename}`, () => {
+          // Deleting book from MongoDB
+          Book.deleteOne({ _id: id })
+            .then(() => {
+              res.status(200).json({ message: 'Book deleted!' });
+            })
+            .catch((error) => res.status(401).json({ error }));
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
 };
 
 exports.rateBook = (req, res) => {

@@ -15,7 +15,7 @@ router.get('/bestrating', booksController.getBestBooks);
 // Protected routes
 router.post('/', auth, multer, booksController.createBook); // OK
 router.put('/:id', auth, multer, booksController.updateBook);
-router.delete('/', auth, booksController.deleteBook);
+router.delete('/:id', auth, booksController.deleteBook);
 router.post('/:id.rating', auth, booksController.rateBook);
 
 module.exports = router;
