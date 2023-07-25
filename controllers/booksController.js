@@ -56,10 +56,36 @@ exports.createBook = (req, res) => {
 };
 
 exports.updateBook = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+  const bookId = req.params.id;
+
+  // if image provided by user, req.body.book exists :
+  const updatedBookObject = req.body.book
+    ? JSON.parse(req.body.book)
+    : req.body;
+  const userId = updatedBookObject.userId;
+
+  const idExtractedFromToken = req.auth.userId;
+  // checking if a user tries to modify another user's book:
+  if (idExtractedFromToken !== userId)
+    res.status(401).json({ message: 'Not authorized' });
+
+  // if image provided by user, update path in database
+  if (req.body.book) {
+    updatedBookObject.imageUrl = `${req.protocol}://${req.get('host')}/images/${
+      req.file.filename
+    }`;
+  }
+
+  // Mongoose
+  Book.findOneAndUpdate(
+    { _id: bookId },
+    {
+      ...updatedBookObject,
+    },
+    { new: true }
+  )
+    .then(() => res.status(204).json({ message: 'Book modified!' }))
+    .catch((error) => res.status(400).json({ error }));
 };
 
 exports.deleteBook = (req, res) => {
