@@ -7,11 +7,10 @@ exports.getAllBooks = (req, res) => {
 };
 
 exports.getBook = (req, res) => {
-  console.log('get (a specific) Book !');
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+  const id = req.params.id;
+  Book.findOne({ _id: id })
+    .then((book) => res.status(200).json(book))
+    .catch((error) => res.status(404).json({ error }));
 };
 
 exports.getBestBooks = (req, res) => {
@@ -43,6 +42,7 @@ exports.createBook = (req, res) => {
       grade: bookObject.ratings[0].grade,
       userId: idExtractedFromToken,
     },
+    averageRating: 0,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${
       req.file.filename
     }`,
