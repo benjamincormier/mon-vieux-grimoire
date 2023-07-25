@@ -26,11 +26,11 @@ exports.createBook = (req, res) => {
   // req.body.book example :
   // {"userId":"xyz","title":"TITRE","author":"AUTEUR","year":"1995","genre":"GENRE","ratings":[{"userId":"xyz","grade":3}],"averageRating":3}
   const bookObject = JSON.parse(req.body.book);
-  console.log(bookObject);
+  // console.log(bookObject);
   // 1 - Deleting userId in book and book.rating and replacing them with userId extracted from the token
   delete bookObject.userId;
   delete bookObject.ratings[0].userId;
-  console.log(bookObject);
+  // console.log(bookObject);
 
   const idExtractedFromToken = req.auth.userId;
 
@@ -40,7 +40,7 @@ exports.createBook = (req, res) => {
     userId: idExtractedFromToken,
     // ratings[0].userId : idExtractedFromToken,
     ratings: {
-      ...bookObject.ratings,
+      grade: bookObject.ratings[0].grade,
       userId: idExtractedFromToken,
     },
     imageUrl: `${req.protocol}://${req.get('host')}/images/${

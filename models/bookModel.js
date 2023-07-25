@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const ratingSchema = mongoose.Schema({
+  userId: String,
+  grade: Number,
+});
+
 const bookSchema = mongoose.Schema({
   userId: String,
   title: String,
@@ -7,12 +12,7 @@ const bookSchema = mongoose.Schema({
   imageUrl: String,
   year: Number,
   genre: String,
-  /*   ratings: [
-    {
-      userId: String,
-      grade: Number,
-    },
-  ], */
+  ratings: [ratingSchema],
   averageRating: Number,
 });
 
