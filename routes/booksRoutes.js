@@ -9,8 +9,8 @@ const booksController = require('../controllers/booksController');
 
 // Unprotected routes
 router.get('/', booksController.getAllBooks); // OK
+router.get('/bestrating', booksController.getBestBooks); // before "/:id" to avoid error
 router.get('/:id', booksController.getBook); // OK
-router.get('/bestrating', booksController.getBestBooks);
 
 // Protected routes
 router.post('/', auth, multer, booksController.createBook); // OK

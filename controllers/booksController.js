@@ -16,11 +16,14 @@ exports.getBook = (req, res) => {
 };
 
 exports.getBestBooks = (req, res) => {
-  console.log('get the 3 best Books !');
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+  Book.find()
+    .then((books) => {
+      const bestBooks = books
+        .sort((a, b) => b.averageRating - a.averageRating)
+        .slice(0, 3);
+      res.status(200).json(bestBooks);
+    })
+    .catch((error) => res.status(400).json({ error }));
 };
 
 exports.createBook = (req, res) => {
