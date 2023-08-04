@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 const Book = require('../models/bookModel');
+const { log } = require('console');
 
 exports.getAllBooks = (req, res) => {
   Book.find()
@@ -120,8 +121,55 @@ exports.deleteBook = (req, res) => {
 };
 
 exports.rateBook = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+  console.log('bookId', req.params.id);
+  const idExtractedFromToken = req.auth.userId;
+  const bookId = req.params.id;
+
+  // 1 - Checking if userId is correct
+  if (idExtractedFromToken !== req.body.userId)
+    res.status(401).json({ message: 'Not authorized' });
+
+  // 2 - If id is correct, we first need to retrieve the book from the DB
+  Book.findOne({ _id: bookId })
+    .then((book) => {
+      // console.log('avant findOne :', book);
+      if (
+        book.ratings.some((rating) => rating.userId === idExtractedFromToken)
+      ) {
+        res.status(400).json({ message: 'Book already rated!' });
+      }
+
+      book.ratings.push({
+        grade: req.body.rating,
+        userId: idExtractedFromToken,
+      });
+
+      // console.log('avant reduce');
+      // console.log(book.averageRating);
+
+      book.averageRating =
+        book.ratings
+          .map((item) => item.grade)
+          .reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            0
+          ) / book.ratings.length;
+
+      // console.log('après reduce');
+      // console.log(book.averageRating);
+
+      Book.findOneAndUpdate(
+        { _id: bookId },
+        { averageRating: book.averageRating, ratings: book.ratings },
+        { new: true }
+      )
+        .then((updatedBook) => {
+          // console.log('dans findOneAndUpdate :', updatedBook);
+          res.status(201).json(updatedBook);
+        })
+        .catch((error) => res.status(400).json({ error }));
+
+      return 'hello';
+    })
+    .catch((error) => res.status(404).json({ error }));
 };
