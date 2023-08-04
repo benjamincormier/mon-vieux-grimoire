@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const auth = require('../middleware/auth');
-const multer = require('../middleware/multer-config');
+const { upload, optimizeImage } = require('../middleware/multer-sharp-config');
 
 const booksController = require('../controllers/booksController');
 
@@ -13,8 +13,8 @@ router.get('/bestrating', booksController.getBestBooks); // OK, placed before "/
 router.get('/:id', booksController.getBook); // OK
 
 // Protected routes
-router.post('/', auth, multer, booksController.createBook); // OK
-router.put('/:id', auth, multer, booksController.updateBook); // OK
+router.post('/', auth, upload, optimizeImage, booksController.createBook); // OK
+router.put('/:id', auth, upload, optimizeImage, booksController.updateBook); // OK
 router.delete('/:id', auth, booksController.deleteBook); // OK
 router.post('/:id/rating', auth, booksController.rateBook);
 
