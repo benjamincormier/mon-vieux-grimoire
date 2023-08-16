@@ -9,6 +9,8 @@ const upload = multer({
 
 const optimizeImage = async (req, res, next) => {
   try {
+    if (!req.file) next();
+
     const buffer = await sharp(req.file.buffer)
       .resize({ width: 200 }) // img optimization
       .toFormat('jpeg')
@@ -21,7 +23,7 @@ const optimizeImage = async (req, res, next) => {
 
     await sharp(buffer).toFile(`images/${name}`);
 
-    req.file.filename = name; // does what multer.diskStorage() did
+    req.file.filename = name; // multer.diskStorage() ajoutait cette propriété, manuellement ajouté maintenant
 
     next();
   } catch (error) {

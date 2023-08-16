@@ -1,7 +1,6 @@
 const fs = require('fs');
 
 const Book = require('../models/bookModel');
-const { log } = require('console');
 
 exports.getAllBooks = (req, res) => {
   Book.find()
@@ -94,17 +93,17 @@ exports.updateBook = (req, res) => {
 
 exports.deleteBook = (req, res) => {
   const id = req.params.id;
-  console.log('id of the book to delete :', id);
+  // console.log('id of the book to delete :', id);
   Book.findOne({ _id: id })
     .then((book) => {
-      console.log('book ', book);
+      // console.log('book ', book);
       if (book.userId != req.auth.userId) {
         // Checking if user requesting delete book is the user who created resource. If not return 401 "Unauthorized"
         res.status(401).json({ message: 'Not authorized' });
       } else {
         // Deleting image from file system
         const filename = book.imageUrl.split('/images/')[1];
-        console.log('filename :' + filename);
+        // console.log('filename :' + filename);
         fs.unlink(`images/${filename}`, () => {
           // Deleting book from MongoDB
           Book.deleteOne({ _id: id })
@@ -121,7 +120,7 @@ exports.deleteBook = (req, res) => {
 };
 
 exports.rateBook = (req, res) => {
-  console.log('bookId', req.params.id);
+  // console.log('bookId', req.params.id);
   const idExtractedFromToken = req.auth.userId;
   const bookId = req.params.id;
 
